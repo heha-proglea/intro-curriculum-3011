@@ -1,18 +1,25 @@
 'use strict';
 
-// HTTPモジュールの読み込み
 const http = require('http');
+const fs = require('fs');
 
 // モジュールhttpを用いて、サーバーを作成
-const server = http.createServer((req, res) => { // リクエストとレスポンスを引数に受ける
+const server = http.createServer((req, res) => {
     // サーバーにリクエストがあった時に呼び出されるコールバック関数
-    // writeHeadで、レスポンスヘッダを書き込む
-    res.writeHead(200, { // 200は成功を表すステータスコード
-        'Content-Type': 'text/html; charset=utf-8'// HTTPレスポンスの内容のデータ形式について記述
+
+    fs.readFile('./index.html', 'utf-8', (err, data) => { // 第二引数の'utf-8'は無くてもよい？
+        // ファイルを読み込み後に呼び出されるコールバック関数
+
+        res.writeHead(200, {
+            'Content-Type': 'text/html; charset=utf-8'
+        });
+    
+        res.write(data);
+    
+        res.end();
     });
-    // write関数で、HTTPレスポンスの内容を書き出す
-    res.write('<!DOCTYPE html><html lang="ja"><body><h1>HTMLの一番大きい見出しを表示します</h1></body></html>');
-    res.end();
+    
+
 });
 
 // このHTTPが起動するポートを宣言し、サーバーを起動
